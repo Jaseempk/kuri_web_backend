@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kuri Automation Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div id="app" class="container mx-auto px-4 py-8">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">
+          Kuri Automation Dashboard
+        </h1>
+        <div id="system-health" class="mt-4 p-4 bg-white rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4">System Health</h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="health-metric">
+              <span class="text-sm text-gray-600">CPU Usage</span>
+              <div id="cpu-usage" class="text-lg font-bold">-</div>
+            </div>
+            <div class="health-metric">
+              <span class="text-sm text-gray-600">Memory Usage</span>
+              <div id="memory-usage" class="text-lg font-bold">-</div>
+            </div>
+            <div class="health-metric">
+              <span class="text-sm text-gray-600">Network Latency</span>
+              <div id="network-latency" class="text-lg font-bold">-</div>
+            </div>
+            <div class="health-metric">
+              <span class="text-sm text-gray-600">Node Status</span>
+              <div id="node-status" class="text-lg font-bold">-</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Market Performance -->
+          <section class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Market Performance</h2>
+            <div class="mb-4">
+              <select id="market-selector" class="w-full p-2 border rounded">
+                <option value="">Select a market</option>
+              </select>
+            </div>
+            <canvas id="market-metrics-chart"></canvas>
+          </section>
+
+          <!-- Transaction History -->
+          <section class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Transaction History</h2>
+            <canvas id="transaction-history-chart"></canvas>
+          </section>
+
+          <!-- Gas Usage -->
+          <section class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Gas Usage</h2>
+            <canvas id="gas-usage-chart"></canvas>
+          </section>
+
+          <!-- Success Rate -->
+          <section class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Success Rate</h2>
+            <canvas id="success-rate-chart"></canvas>
+          </section>
+        </div>
+
+        <!-- Recent Activity -->
+        <section class="mt-8 bg-white rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
+          <div id="activity-log" class="h-64 overflow-y-auto">
+            <table class="min-w-full">
+              <thead>
+                <tr>
+                  <th class="text-left py-2">Time</th>
+                  <th class="text-left py-2">Market</th>
+                  <th class="text-left py-2">Event</th>
+                  <th class="text-left py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody id="activity-log-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
