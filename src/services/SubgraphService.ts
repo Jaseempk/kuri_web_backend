@@ -1,6 +1,4 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { HttpLink } from "@apollo/client/link/http";
-import fetch from "cross-fetch";
+import { request, gql } from "graphql-request";
 import { config } from "../config/config";
 import {
   SubgraphResponse,
@@ -10,13 +8,10 @@ import {
 import { logger } from "../utils/logger";
 
 export class SubgraphService {
-  private client;
+  private endpoint: string;
 
   constructor() {
-    this.client = new ApolloClient({
-      link: new HttpLink({ uri: config.SUBGRAPH_URL, fetch }),
-      cache: new InMemoryCache(),
-    });
+    this.endpoint = config.SUBGRAPH_URL;
   }
 
   async getActiveMarkets(): Promise<{
@@ -52,9 +47,7 @@ export class SubgraphService {
     `;
 
     try {
-      const { data } = await this.client.query<SubgraphResponse>({
-        query,
-      });
+      const data = await request<SubgraphResponse>(this.endpoint, query);
       return {
         deployed: data.kuriMarketDeployeds,
         initialized: data.kuriInitialiseds,
