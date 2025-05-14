@@ -11,66 +11,12 @@ import { logger } from "../utils/logger";
 import { SubgraphService } from "./SubgraphService";
 import { KuriMarketDeployed, KuriInitialised } from "../types/types";
 import * as schedule from "node-schedule";
+import { kuriCoreABI } from "../config/abi";
 
 // Constants for retry mechanism
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
 const TX_CONFIRMATION_BLOCKS = 2;
-
-// KuriCore ABI - you'll need to export this from your contracts
-const kuriCoreABI = [
-  {
-    inputs: [],
-    name: "kuriNarukk",
-    outputs: [{ name: "_requestId", type: "uint256" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "kuriData",
-    outputs: [
-      { name: "creator", type: "address" },
-      { name: "kuriAmount", type: "uint64" },
-      { name: "totalParticipantsCount", type: "uint16" },
-      { name: "totalActiveParticipantsCount", type: "uint16" },
-      { name: "intervalDuration", type: "uint24" },
-      { name: "nexRaffleTime", type: "uint48" },
-      { name: "nextIntervalDepositTime", type: "uint48" },
-      { name: "launchPeriod", type: "uint48" },
-      { name: "startTime", type: "uint48" },
-      { name: "endTime", type: "uint48" },
-      { name: "intervalType", type: "uint8" },
-      { name: "state", type: "uint8" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "passedIntervalsCounter",
-    outputs: [{ name: "numTotalDepositIntervalsPassed", type: "uint16" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { name: "_user", type: "address" },
-      { name: "_intervalIndex", type: "uint256" },
-    ],
-    name: "hasPaid",
-    outputs: [{ name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "getActiveIndicesLength",
-    outputs: [{ name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-] as const;
 
 interface MarketState {
   isActive: boolean;
@@ -257,24 +203,24 @@ export class AutomationService {
   ): Promise<MarketState | null> {
     return this.retryWithBackoff(async () => {
       try {
-        const marketData = await this.publicClient.readContract({
+        const marketData = (await this.publicClient.readContract({
           address: market.marketAddress as `0x${string}`,
           abi: kuriCoreABI,
           functionName: "kuriData",
-        });
+        })) as readonly [any, ...any[]];
 
-        const currentInterval = await this.publicClient.readContract({
+        const currentInterval = (await this.publicClient.readContract({
           address: market.marketAddress as `0x${string}`,
           abi: kuriCoreABI,
           functionName: "passedIntervalsCounter",
-        });
+        })) as bigint;
 
         return {
           isActive: marketData[11] === 2,
           nexRaffleTime: BigInt(marketData[5]),
           nextIntervalDepositTime: BigInt(marketData[6]),
           totalParticipants: BigInt(marketData[2]),
-          currentInterval: BigInt(currentInterval),
+          currentInterval: currentInterval,
         };
       } catch (error) {
         logger.error(
