@@ -9,6 +9,7 @@ import { baseSepolia } from "viem/chains";
 import { config } from "../config/config";
 import { logger } from "../utils/logger";
 import { SubgraphService } from "./SubgraphService";
+import { VRFSubscriptionService } from "./VRFSubscriptionService";
 import { KuriMarketDeployed, KuriInitialised } from "../types/types";
 import * as schedule from "node-schedule";
 import { kuriCoreABI } from "../config/abi";
@@ -37,6 +38,7 @@ export class AutomationService {
   private publicClient;
   private walletClient;
   private subgraphService;
+  private vrfSubscriptionService;
   private scheduleJob;
   private pendingTransactions: Map<string, TransactionStatus>;
 
@@ -55,11 +57,18 @@ export class AutomationService {
     });
 
     this.subgraphService = new SubgraphService();
+    this.vrfSubscriptionService = new VRFSubscriptionService();
     this.pendingTransactions = new Map();
 
-    // Schedule checks every hour
-    this.scheduleJob = schedule.scheduleJob("0 * * * *", () => {
+    // Schedule raffle checks every 5 minutes
+    this.scheduleJob = schedule.scheduleJob("*/5 * * * *", () => {
       this.checkAndExecuteRaffles();
+    });
+
+    // Schedule VRF subscription checks every 2 hours
+    schedule.scheduleJob("0 */2 * * *", () => {
+      logger.info("Starting scheduled VRF subscription check");
+      this.vrfSubscriptionService.processUnsubscribedContracts();
     });
 
     // Start monitoring pending transactions
