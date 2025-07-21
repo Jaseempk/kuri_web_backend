@@ -24,6 +24,7 @@ interface MarketState {
   nexRaffleTime: bigint;
   nextIntervalDepositTime: bigint;
   totalParticipants: bigint;
+  totalActiveParticipants: bigint; // Add totalActiveParticipants field
   currentInterval: bigint;
 }
 
@@ -228,7 +229,8 @@ export class AutomationService {
           isActive: marketData[11] === 2,
           nexRaffleTime: BigInt(marketData[5]),
           nextIntervalDepositTime: BigInt(marketData[6]),
-          totalParticipants: BigInt(marketData[2]),
+          totalParticipants: BigInt(marketData[2]), // totalParticipantsCount
+          totalActiveParticipants: BigInt(marketData[3]), // totalActiveParticipantsCount
           currentInterval: currentInterval,
         };
       } catch (error) {
@@ -247,26 +249,44 @@ export class AutomationService {
   ): Promise<boolean> {
     return this.retryWithBackoff(async () => {
       try {
-        const activeIndicesLength = await this.publicClient.readContract({
-          address: marketAddress as `0x${string}`,
-          abi: kuriCoreABI,
-          functionName: "getActiveIndicesLength",
-        });
+        // Remove the buggy activeIndicesLength check since it decreases after each raffle
+        // Instead, use totalActiveParticipants which remains constant throughout the cycle
 
         let allPaid = true;
-        for (let i = 1; i <= Number(state.totalParticipants); i++) {
+        // Use totalActiveParticipants instead of totalParticipants and iterate through user IDs
+        for (let i = 1; i <= Number(state.totalActiveParticipants); i++) {
+          // Get the actual user address from the user ID mapping
+          const userAddress = await this.publicClient.readContract({
+            address: marketAddress as `0x${string}`,
+            abi: kuriCoreABI,
+            functionName: "userIdToAddress",
+            args: [i],
+          });
+
+          // Check if this user has paid for the current interval
           const hasPaid = await this.publicClient.readContract({
             address: marketAddress as `0x${string}`,
             abi: kuriCoreABI,
             functionName: "hasPaid",
-            args: [`0x${i.toString(16)}`, state.currentInterval],
+            args: [userAddress, state.currentInterval],
           });
 
           if (!hasPaid) {
+            logger.warn(
+              `User ${userAddress} (ID: ${i}) has not paid for interval ${state.currentInterval} in market ${marketAddress}`
+            );
             allPaid = false;
             break;
           }
         }
+
+        logger.info(
+          `Payment verification for market ${marketAddress}: ${
+            allPaid ? "All payments verified" : "Some payments missing"
+          } (checked ${
+            state.totalActiveParticipants
+          } participants for interval ${state.currentInterval})`
+        );
 
         return allPaid;
       } catch (error) {
