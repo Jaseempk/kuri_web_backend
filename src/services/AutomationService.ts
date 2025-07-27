@@ -24,6 +24,7 @@ interface MarketState {
   nexRaffleTime: bigint;
   nextIntervalDepositTime: bigint;
   totalParticipants: bigint;
+  totalActiveParticipants: bigint;
   currentInterval: bigint;
 }
 
@@ -229,6 +230,7 @@ export class AutomationService {
           nexRaffleTime: BigInt(marketData[5]),
           nextIntervalDepositTime: BigInt(marketData[6]),
           totalParticipants: BigInt(marketData[2]),
+          totalActiveParticipants: BigInt(marketData[3]),
           currentInterval: currentInterval,
         };
       } catch (error) {
@@ -247,19 +249,24 @@ export class AutomationService {
   ): Promise<boolean> {
     return this.retryWithBackoff(async () => {
       try {
-        const activeIndicesLength = await this.publicClient.readContract({
-          address: marketAddress as `0x${string}`,
-          abi: kuriCoreABI,
-          functionName: "getActiveIndicesLength",
-        });
-
         let allPaid = true;
-        for (let i = 1; i <= Number(state.totalParticipants); i++) {
+        
+        // Use totalActiveParticipants instead of totalParticipants
+        for (let i = 1; i <= Number(state.totalActiveParticipants); i++) {
+          // Get the user address from the user index
+          const userAddress = await this.publicClient.readContract({
+            address: marketAddress as `0x${string}`,
+            abi: kuriCoreABI,
+            functionName: "userIdToAddress",
+            args: [i],
+          });
+
+          // Check if this user has paid for the current interval
           const hasPaid = await this.publicClient.readContract({
             address: marketAddress as `0x${string}`,
             abi: kuriCoreABI,
             functionName: "hasPaid",
-            args: [`0x${i.toString(16)}`, state.currentInterval],
+            args: [userAddress, state.currentInterval],
           });
 
           if (!hasPaid) {
