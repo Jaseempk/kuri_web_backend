@@ -20,8 +20,9 @@ interface FundedSubscriptionData {
 
 interface SubscriptionInfo {
   balance: bigint;
+  nativeBalance: bigint;
   reqCount: bigint;
-  owner: string;
+  subOwner: string;
   consumers: string[];
 }
 
@@ -30,10 +31,12 @@ export class VRFSubscriptionService {
   private walletClient;
   private subgraphService;
   private fundedSubscriptions: Set<string> = new Set();
+  private failedFundingAttempts: Map<string, number> = new Map();
   private readonly storageFile = path.join(process.cwd(), 'funded-subscriptions.json');
   private readonly minimumBalance = BigInt('1000000000000000000'); // 1 LINK
   private readonly fundingAmount = BigInt('5000000000000000000'); // 5 LINK
   private readonly subscriptionManagerAddress = config.SUBSCRIPTION_MANAGER;
+  private readonly maxRetryAttempts = 3;
 
   constructor() {
     this.publicClient = createPublicClient({
@@ -114,11 +117,19 @@ export class VRFSubscriptionService {
 
       // Check if funding is needed
       if (subscriptionInfo.balance < this.minimumBalance) {
-        logger.info(`Subscription ${subId} needs funding. Balance: ${subscriptionInfo.balance}, Minimum: ${this.minimumBalance}`);
+        // Check if we've exceeded max retry attempts
+        const attempts = this.failedFundingAttempts.get(subId) || 0;
+        if (attempts >= this.maxRetryAttempts) {
+          logger.error(`Subscription ${subId} has exceeded max funding attempts (${this.maxRetryAttempts}). Skipping.`);
+          return;
+        }
+
+        logger.info(`Subscription ${subId} needs funding. Balance: ${subscriptionInfo.balance}, Minimum: ${this.minimumBalance} (Attempt ${attempts + 1}/${this.maxRetryAttempts})`);
         await this.fundSubscription(subId);
       } else {
         logger.debug(`Subscription ${subId} has sufficient balance: ${subscriptionInfo.balance}`);
-        // Mark as funded to avoid future checks
+        // Clear any previous failed attempts and mark as funded
+        this.failedFundingAttempts.delete(subId);
         this.addToFundedList(subId);
       }
     } catch (error) {
@@ -137,8 +148,9 @@ export class VRFSubscriptionService {
             "name": "getSubscription",
             "outputs": [
               {"internalType": "uint96", "name": "balance", "type": "uint96"},
+              {"internalType": "uint96", "name": "nativeBalance", "type": "uint96"},
               {"internalType": "uint64", "name": "reqCount", "type": "uint64"},
-              {"internalType": "address", "name": "owner", "type": "address"},
+              {"internalType": "address", "name": "subOwner", "type": "address"},
               {"internalType": "address[]", "name": "consumers", "type": "address[]"}
             ],
             "stateMutability": "view",
@@ -147,13 +159,14 @@ export class VRFSubscriptionService {
         ],
         functionName: "getSubscription",
         args: [BigInt(subId)],
-      }) as [bigint, bigint, string, string[]];
+      }) as [bigint, bigint, bigint, string, string[]];
 
       return {
         balance: subscriptionData[0],
-        reqCount: subscriptionData[1], 
-        owner: subscriptionData[2],
-        consumers: subscriptionData[3]
+        nativeBalance: subscriptionData[1],
+        reqCount: subscriptionData[2], 
+        subOwner: subscriptionData[3],
+        consumers: subscriptionData[4]
       };
     } catch (error) {
       logger.error(`Error getting subscription info for ${subId}:`, error);
@@ -181,13 +194,59 @@ export class VRFSubscriptionService {
       const receipt = await this.publicClient.waitForTransactionReceipt({ hash });
       
       if (receipt.status === 'success') {
-        this.addToFundedList(subId);
-        logger.info(`Successfully funded subscription ${subId}`);
+        // Verify funding was successful by checking updated balance
+        const verificationResult = await this.verifyFundingSuccess(subId);
+        
+        if (verificationResult.success) {
+          // Reset failed attempts counter and mark as funded
+          this.failedFundingAttempts.delete(subId);
+          this.addToFundedList(subId);
+          logger.info(`Successfully funded subscription ${subId}. New balance: ${verificationResult.newBalance}`);
+        } else {
+          // Increment failed attempts counter
+          const attempts = (this.failedFundingAttempts.get(subId) || 0) + 1;
+          this.failedFundingAttempts.set(subId, attempts);
+          logger.error(`Funding verification failed for subscription ${subId}. Current balance: ${verificationResult.newBalance}, Expected minimum: ${this.minimumBalance} (Failed attempts: ${attempts})`);
+        }
       } else {
-        logger.error(`Funding transaction failed for subscription ${subId}`);
+        // Increment failed attempts counter for transaction failure
+        const attempts = (this.failedFundingAttempts.get(subId) || 0) + 1;
+        this.failedFundingAttempts.set(subId, attempts);
+        logger.error(`Funding transaction failed for subscription ${subId} (Failed attempts: ${attempts})`);
       }
     } catch (error) {
-      logger.error(`Error funding subscription ${subId}:`, error);
+      // Increment failed attempts counter for errors
+      const attempts = (this.failedFundingAttempts.get(subId) || 0) + 1;
+      this.failedFundingAttempts.set(subId, attempts);
+      logger.error(`Error funding subscription ${subId} (Failed attempts: ${attempts}):`, error);
+    }
+  }
+
+  private async verifyFundingSuccess(subId: string): Promise<{success: boolean, newBalance: bigint}> {
+    try {
+      // Wait a bit for the balance to update on-chain
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Get updated subscription info
+      const subscriptionInfo = await this.getSubscriptionInfo(subId);
+      
+      if (!subscriptionInfo) {
+        logger.warn(`Could not verify funding for subscription ${subId} - unable to fetch subscription info`);
+        return { success: false, newBalance: BigInt(0) };
+      }
+
+      // Check if balance now meets minimum requirement
+      const fundingSuccessful = subscriptionInfo.balance >= this.minimumBalance;
+      
+      logger.info(`Funding verification for subscription ${subId}: Balance=${subscriptionInfo.balance}, Minimum=${this.minimumBalance}, Success=${fundingSuccessful}`);
+      
+      return {
+        success: fundingSuccessful,
+        newBalance: subscriptionInfo.balance
+      };
+    } catch (error) {
+      logger.error(`Error verifying funding for subscription ${subId}:`, error);
+      return { success: false, newBalance: BigInt(0) };
     }
   }
 
