@@ -74,6 +74,9 @@ export class AutomationService {
 
     // Start monitoring pending transactions
     this.startTransactionMonitoring();
+
+    // Perform initial subscription funding check on startup
+    this.performInitialSubscriptionCheck();
   }
 
   private async delay(ms: number): Promise<void> {
@@ -187,6 +190,15 @@ export class AutomationService {
         `Failed to retry raffle for market ${marketAddress}:`,
         error
       );
+    }
+  }
+
+  private async performInitialSubscriptionCheck(): Promise<void> {
+    try {
+      logger.info("Starting initial VRF subscription funding check on startup");
+      await this.vrfSubscriptionService.processUnfundedSubscriptions();
+    } catch (error) {
+      logger.error("Error during initial subscription funding check:", error);
     }
   }
 
