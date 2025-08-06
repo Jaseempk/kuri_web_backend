@@ -21,7 +21,7 @@ export class SubgraphService {
     const query = gql`
       query KuriMarkets {
         kuriMarketDeployeds: KuriCoreFactory_KuriMarketDeployed(
-          order_by: { timestamp: desc }
+          order_by: [{timestamp: desc}]
         ) {
           id
           caller
