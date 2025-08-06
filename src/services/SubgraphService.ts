@@ -20,28 +20,32 @@ export class SubgraphService {
   }> {
     const query = gql`
       query KuriMarkets {
-        kuriMarketDeployeds(orderBy: timestamp, orderDirection: desc) {
+        kuriMarketDeployeds: KuriCoreFactory_KuriMarketDeployed(
+          order_by: { timestamp: desc }
+        ) {
           id
           caller
           marketAddress
           intervalType
           timestamp
-          blockTimestamp
+          wannabeMember
+          circleCurrencyAddress
         }
-        kuriInitialiseds {
+        kuriInitialiseds: KuriCore_KuriInitialised {
           id
-          _kuriData_creator
-          _kuriData_kuriAmount
-          _kuriData_totalParticipantsCount
-          _kuriData_totalActiveParticipantsCount
-          _kuriData_intervalDuration
-          _kuriData_nexRaffleTime
-          _kuriData_nextIntervalDepositTime
-          _kuriData_launchPeriod
-          _kuriData_startTime
-          _kuriData_endTime
-          _kuriData_intervalType
-          _kuriData_state
+          _kuriData_0
+          _kuriData_1
+          _kuriData_10
+          _kuriData_11
+          _kuriData_2
+          _kuriData_3
+          _kuriData_4
+          _kuriData_5
+          _kuriData_6
+          _kuriData_7
+          _kuriData_8
+          _kuriData_9
+          contractAddress
         }
       }
     `;

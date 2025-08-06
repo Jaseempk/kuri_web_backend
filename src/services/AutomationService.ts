@@ -12,7 +12,7 @@ import { SubgraphService } from "./SubgraphService";
 import { VRFSubscriptionService } from "./VRFSubscriptionService";
 import { KuriMarketDeployed, KuriInitialised } from "../types/types";
 import * as schedule from "node-schedule";
-import { kuriCoreABI } from "../config/abi";
+import { KuriCoreABI } from "../config/newAbi";
 
 // Constants for retry mechanism
 const MAX_RETRIES = 3;
@@ -25,7 +25,7 @@ interface MarketState {
   nextIntervalDepositTime: bigint;
   totalParticipants: bigint;
   totalActiveParticipants: bigint;
-  currentInterval: bigint;
+  currentInterval: number;
 }
 
 interface TransactionStatus {
@@ -66,10 +66,10 @@ export class AutomationService {
       this.checkAndExecuteRaffles();
     });
 
-    // Schedule VRF subscription checks every 2 hours
+    // Schedule VRF subscription funding checks every 2 hours
     schedule.scheduleJob("0 */2 * * *", () => {
-      logger.info("Starting scheduled VRF subscription check");
-      this.vrfSubscriptionService.processUnsubscribedContracts();
+      logger.info("Starting scheduled VRF subscription funding check");
+      this.vrfSubscriptionService.processUnfundedSubscriptions();
     });
 
     // Start monitoring pending transactions
@@ -165,7 +165,7 @@ export class AutomationService {
 
       const { request } = await this.publicClient.simulateContract({
         address: marketAddress as `0x${string}`,
-        abi: kuriCoreABI,
+        abi: KuriCoreABI,
         functionName: "kuriNarukk",
       });
 
@@ -215,15 +215,15 @@ export class AutomationService {
       try {
         const marketData = (await this.publicClient.readContract({
           address: market.marketAddress as `0x${string}`,
-          abi: kuriCoreABI,
+          abi: KuriCoreABI,
           functionName: "kuriData",
         })) as readonly [any, ...any[]];
 
         const currentInterval = (await this.publicClient.readContract({
           address: market.marketAddress as `0x${string}`,
-          abi: kuriCoreABI,
+          abi: KuriCoreABI,
           functionName: "passedIntervalsCounter",
-        })) as bigint;
+        })) as number;
 
         return {
           isActive: marketData[11] === 2,
@@ -250,13 +250,13 @@ export class AutomationService {
     return this.retryWithBackoff(async () => {
       try {
         let allPaid = true;
-        
+
         // Use totalActiveParticipants instead of totalParticipants
         for (let i = 1; i <= Number(state.totalActiveParticipants); i++) {
           // Get the user address from the user index
           const userAddress = await this.publicClient.readContract({
             address: marketAddress as `0x${string}`,
-            abi: kuriCoreABI,
+            abi: KuriCoreABI,
             functionName: "userIdToAddress",
             args: [i],
           });
@@ -264,9 +264,9 @@ export class AutomationService {
           // Check if this user has paid for the current interval
           const hasPaid = await this.publicClient.readContract({
             address: marketAddress as `0x${string}`,
-            abi: kuriCoreABI,
+            abi: KuriCoreABI,
             functionName: "hasPaid",
-            args: [userAddress, state.currentInterval],
+            args: [userAddress, BigInt(state.currentInterval)],
           });
 
           if (!hasPaid) {
@@ -319,7 +319,7 @@ export class AutomationService {
       logger.info(`Initiating raffle for market: ${market.marketAddress}`);
       const { request } = await this.publicClient.simulateContract({
         address: market.marketAddress as `0x${string}`,
-        abi: kuriCoreABI,
+        abi: KuriCoreABI,
         functionName: "kuriNarukk",
       });
 
