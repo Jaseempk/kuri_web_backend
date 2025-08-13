@@ -49,7 +49,17 @@ export class AutomationService {
       transport: http(config.RPC_URL),
     });
 
+    // Debug private key setup
+    logger.info(`Private key available: ${!!config.PRIVATE_KEY}`);
+    logger.info(`Private key length: ${config.PRIVATE_KEY?.length || 0}`);
+    logger.info(`Private key starts with 0x: ${config.PRIVATE_KEY?.startsWith('0x')}`);
+
+    if (!config.PRIVATE_KEY || config.PRIVATE_KEY.length < 64) {
+      throw new Error(`Invalid PRIVATE_KEY: ${config.PRIVATE_KEY ? 'too short' : 'not provided'}`);
+    }
+
     const account = privateKeyToAccount(config.PRIVATE_KEY as `0x${string}`);
+    logger.info(`Wallet account address: ${account.address}`);
 
     this.walletClient = createWalletClient({
       account,
@@ -170,6 +180,7 @@ export class AutomationService {
         address: marketAddress as `0x${string}`,
         abi: KuriCoreABI,
         functionName: "kuriNarukk",
+        account: this.walletClient.account, // Add account to retry simulation
       });
 
       const hash = await this.walletClient.writeContract(request);
@@ -329,10 +340,13 @@ export class AutomationService {
       }
 
       logger.info(`Initiating raffle for market: ${market.marketAddress}`);
+      logger.info(`Using account: ${this.walletClient.account?.address}`);
+      
       const { request } = await this.publicClient.simulateContract({
         address: market.marketAddress as `0x${string}`,
         abi: KuriCoreABI,
         functionName: "kuriNarukk",
+        account: this.walletClient.account, // Add account to simulation
       });
 
       const hash = await this.walletClient.writeContract(request);
