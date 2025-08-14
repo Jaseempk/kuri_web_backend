@@ -4,6 +4,8 @@ import {
   SubgraphResponse,
   KuriMarketDeployed,
   KuriInitialised,
+  RaffleWinnerResponse,
+  RaffleWinnerSelected,
 } from "../types/types";
 import { logger } from "../utils/logger";
 
@@ -58,6 +60,46 @@ export class SubgraphService {
       };
     } catch (error) {
       logger.error("Failed to fetch active markets:", error);
+      throw error;
+    }
+  }
+
+  async getRecentRaffleWinner(
+    marketAddress: string,
+    currentInterval: number
+  ): Promise<RaffleWinnerSelected | null> {
+    const query = gql`
+      query RecentRaffleWinner($marketAddress: String!, $intervalIndex: String!) {
+        raffleWinnerSelecteds: KuriCore_RaffleWinnerSelected(
+          where: { 
+            contractAddress: { _ilike: $marketAddress }
+            intervalIndex: { _eq: $intervalIndex }
+          }
+          order_by: { winnerTimestamp: desc }
+          limit: 1
+        ) {
+          id
+          intervalIndex
+          winnerIndex
+          winnerAddress
+          winnerTimestamp
+          requestId
+          contractAddress
+        }
+      }
+    `;
+
+    try {
+      const data = await request<RaffleWinnerResponse>(this.endpoint, query, {
+        marketAddress,
+        intervalIndex: currentInterval.toString(),
+      });
+      
+      return data.raffleWinnerSelecteds.length > 0 
+        ? data.raffleWinnerSelecteds[0] 
+        : null;
+    } catch (error) {
+      logger.error("Failed to fetch raffle winner:", error);
       throw error;
     }
   }

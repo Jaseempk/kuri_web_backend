@@ -25,7 +25,21 @@ export interface KuriInitialised {
   contractAddress: string;
 }
 
+export interface RaffleWinnerSelected {
+  id: string;
+  intervalIndex: string;
+  winnerIndex: string;
+  winnerAddress: string;
+  winnerTimestamp: string;
+  requestId: string;
+  contractAddress: string;
+}
+
 export interface SubgraphResponse {
   kuriMarketDeployeds: KuriMarketDeployed[];
   kuriInitialiseds: KuriInitialised[];
+}
+
+export interface RaffleWinnerResponse {
+  raffleWinnerSelecteds: RaffleWinnerSelected[];
 }

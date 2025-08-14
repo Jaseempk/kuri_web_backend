@@ -339,6 +339,19 @@ export class AutomationService {
         return;
       }
 
+      // Check if raffle has already been executed for current interval
+      const existingRaffleWinner = await this.subgraphService.getRecentRaffleWinner(
+        market.marketAddress,
+        state.currentInterval
+      );
+      
+      if (existingRaffleWinner) {
+        logger.info(
+          `Raffle already executed for market ${market.marketAddress} interval ${state.currentInterval}. Winner: ${existingRaffleWinner.winnerAddress}`
+        );
+        return;
+      }
+
       logger.info(`Initiating raffle for market: ${market.marketAddress}`);
       logger.info(`Using account: ${this.walletClient.account?.address}`);
       
