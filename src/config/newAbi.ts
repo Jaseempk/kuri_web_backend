@@ -1,1290 +1,1875 @@
 export const KuriCoreABI = [
   {
+    type: "constructor",
     inputs: [
-      { internalType: "uint64", name: "_kuriAmount", type: "uint64" },
       {
-        internalType: "uint16",
+        name: "_kuriAmount",
+        type: "uint64",
+        internalType: "uint64",
+      },
+      {
         name: "_participantCount",
         type: "uint16",
+        internalType: "uint16",
       },
-      { internalType: "address", name: "_initialiser", type: "address" },
-      { internalType: "address", name: "_kuriAdmin", type: "address" },
       {
+        name: "_initialiser",
+        type: "address",
         internalType: "address",
+      },
+      {
+        name: "_kuriAdmin",
+        type: "address",
+        internalType: "address",
+      },
+      {
         name: "_vrfSubscriber",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "enum KuriCore.IntervalType",
         name: "_intervalType",
         type: "uint8",
+        internalType: "enum KuriCore.IntervalType",
       },
-      { internalType: "bool", name: "_wannabeMember", type: "bool" },
       {
-        internalType: "address",
+        name: "_wannabeMember",
+        type: "bool",
+        internalType: "bool",
+      },
+      {
         name: "_circleCurrency",
         type: "address",
+        internalType: "address",
       },
       {
-        internalType: "address",
         name: "_vrfcoordinator",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  { inputs: [], name: "AccessControlBadConfirmation", type: "error" },
-  {
-    inputs: [
-      { internalType: "address", name: "account", type: "address" },
-      { internalType: "bytes32", name: "neededRole", type: "bytes32" },
-    ],
-    name: "AccessControlUnauthorizedAccount",
-    type: "error",
   },
   {
-    inputs: [],
-    name: "KuriCore__AlreadyPastLaunchPeriod",
-    type: "error",
-  },
-  { inputs: [], name: "KuriCore__AlreadyRejected", type: "error" },
-  { inputs: [], name: "KuriCore__BeefyArraysOutOfBound", type: "error" },
-  { inputs: [], name: "KuriCore__CallerNotAccepted", type: "error" },
-  { inputs: [], name: "KuriCore__CantAcceptMoreThanMax", type: "error" },
-  {
-    inputs: [],
-    name: "KuriCore__CantFlagForInvalidIndex",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "KuriCore__CantFlagUserAlreadyPaid",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "KuriCore__CantOperateWhenNotInLaunch",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "KuriCore__CantWithdrawWhenCycleIsActive",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "KuriCore__DepositIntervalNotReached",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "KuriCore__InsufficientClaimBalance",
-    type: "error",
-  },
-  { inputs: [], name: "KuriCore__InvalidAddress", type: "error" },
-  {
-    inputs: [],
-    name: "KuriCore__InvalidBeefyDepositAmount",
-    type: "error",
-  },
-  { inputs: [], name: "KuriCore__InvalidIntervalIndex", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidPosition", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidRecipient", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidSource", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidSubscriptionId", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidUser", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidUserRequest", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidVaultAddress", type: "error" },
-  { inputs: [], name: "KuriCore__InvalidWithdrawToken", type: "error" },
-  { inputs: [], name: "KuriCore__KuriFilledAlready", type: "error" },
-  {
-    inputs: [],
-    name: "KuriCore__MatketYetToBeSubscribed",
-    type: "error",
-  },
-  { inputs: [], name: "KuriCore__NoActiveIndicesLeft", type: "error" },
-  { inputs: [], name: "KuriCore__NoActiveKuri", type: "error" },
-  { inputs: [], name: "KuriCore__NotInLaunchState", type: "error" },
-  {
-    inputs: [],
-    name: "KuriCore__OnlyCircleCurrencyAllowed",
-    type: "error",
-  },
-  { inputs: [], name: "KuriCore__RaffleDelayNotOver", type: "error" },
-  { inputs: [], name: "KuriCore__UserAlreadyAccepted", type: "error" },
-  { inputs: [], name: "KuriCore__UserAlreadyDeposited", type: "error" },
-  { inputs: [], name: "KuriCore__UserAlreadyFlagged", type: "error" },
-  { inputs: [], name: "KuriCore__UserAlreadyRequested", type: "error" },
-  { inputs: [], name: "KuriCore__UserHasClaimedAlready", type: "error" },
-  { inputs: [], name: "KuriCore__UserYetToGetASlot", type: "error" },
-  { inputs: [], name: "KuriCore__UserYetToMakePayments", type: "error" },
-  {
-    inputs: [
-      { internalType: "address", name: "have", type: "address" },
-      { internalType: "address", name: "want", type: "address" },
-    ],
-    name: "OnlyCoordinatorCanFulfill",
-    type: "error",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "have", type: "address" },
-      { internalType: "address", name: "owner", type: "address" },
-      { internalType: "address", name: "coordinator", type: "address" },
-    ],
-    name: "OnlyOwnerOrCoordinator",
-    type: "error",
-  },
-  { inputs: [], name: "ZeroAddress", type: "error" },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint16",
-        name: "intervalIndex",
-        type: "uint16",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "vaultAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "shareAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "kuriAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "BeefyVaultDeposit",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "vaultAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "shareAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "withdrawAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "BeefyVaultWithdraw",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "vrfCoordinator",
-        type: "address",
-      },
-    ],
-    name: "CoordinatorSet",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "creator",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "kuriAmount",
-        type: "uint64",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "totalParticipantsCount",
-        type: "uint16",
-      },
-      {
-        indexed: false,
-        internalType: "enum KuriCore.KuriState",
-        name: "state",
-        type: "uint8",
-      },
-    ],
-    name: "KuriInitFailed",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        components: [
-          { internalType: "address", name: "creator", type: "address" },
-          { internalType: "uint64", name: "kuriAmount", type: "uint64" },
-          {
-            internalType: "uint16",
-            name: "totalParticipantsCount",
-            type: "uint16",
-          },
-          {
-            internalType: "uint16",
-            name: "totalActiveParticipantsCount",
-            type: "uint16",
-          },
-          {
-            internalType: "uint24",
-            name: "intervalDuration",
-            type: "uint24",
-          },
-          {
-            internalType: "uint48",
-            name: "nexRaffleTime",
-            type: "uint48",
-          },
-          {
-            internalType: "uint48",
-            name: "nextIntervalDepositTime",
-            type: "uint48",
-          },
-          {
-            internalType: "uint48",
-            name: "launchPeriod",
-            type: "uint48",
-          },
-          { internalType: "uint48", name: "startTime", type: "uint48" },
-          { internalType: "uint48", name: "endTime", type: "uint48" },
-          {
-            internalType: "enum KuriCore.IntervalType",
-            name: "intervalType",
-            type: "uint8",
-          },
-          {
-            internalType: "enum KuriCore.KuriState",
-            name: "state",
-            type: "uint8",
-          },
-        ],
-        indexed: false,
-        internalType: "struct KuriCore.Kuri",
-        name: "_kuriData",
-        type: "tuple",
-      },
-    ],
-    name: "KuriInitialised",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "timestamp",
-        type: "uint64",
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "kuriAmount",
-        type: "uint64",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "intervalIndex",
-        type: "uint16",
-      },
-    ],
-    name: "KuriSlotClaimed",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "subscriptionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "subscriber",
-        type: "address",
-      },
-    ],
-    name: "MarketVRFSubscriptionDone",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-    ],
-    name: "MembershipRequested",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferRequested",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "intervalIndex",
-        type: "uint16",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "winnerIndex",
-        type: "uint16",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "winnerAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint48",
-        name: "winnerTimestamp",
-        type: "uint48",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "requestId",
-        type: "uint256",
-      },
-    ],
-    name: "RaffleWinnerSelected",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "previousAdminRole",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "newAdminRole",
-        type: "bytes32",
-      },
-    ],
-    name: "RoleAdminChanged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleGranted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "role",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "RoleRevoked",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "caller",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "_totalActiveParticipantsCount",
-        type: "uint16",
-      },
-    ],
-    name: "UserAccepted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "userIndex",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "intervalIndex",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint64",
-        name: "amountDeposited",
-        type: "uint64",
-      },
-      {
-        indexed: false,
-        internalType: "uint48",
-        name: "depositTimestamp",
-        type: "uint48",
-      },
-    ],
-    name: "UserDeposited",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint16",
-        name: "intervalIndex",
-        type: "uint16",
-      },
-    ],
-    name: "UserFlagged",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "caller",
-        type: "address",
-      },
-    ],
-    name: "UserRejected",
-    type: "event",
-  },
-  {
-    inputs: [],
+    type: "function",
     name: "DEFAULT_ADMIN_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "GRACE_PERIOD_DURATION",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
-    name: "INITIALISOR_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
     type: "function",
-  },
-  {
-    inputs: [],
-    name: "LAUNCH_PERIOD_DURATION",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MONTHLY_INTERVAL",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "RAFFLE_DELAY_DURATION",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "VRFSUBSCRIBER_ROLE",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "WEEKLY_INTERVAL",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address[]", name: "_users", type: "address[]" }],
     name: "acceptMultipleUserMembershipRequests",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "acceptOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_user", type: "address" }],
-    name: "acceptUserMembershipRequest",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "activeIndices",
-    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
+        name: "_users",
+        type: "address[]",
+        internalType: "address[]",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "acceptOwnership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "acceptUserMembershipRequest",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "activeIndices",
+    inputs: [
+      {
+        name: "",
+        type: "uint256",
         internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "addSubId",
+    inputs: [
+      {
         name: "_newSubscriptionId",
         type: "uint256",
+        internalType: "uint256",
       },
     ],
-    name: "addSubId",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "circleCurrency",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint16", name: "_intervalIndex", type: "uint16" },
-    ],
-    name: "claimKuriAmount",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "claimedKuriSlot",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint16", name: "_intervalIndex", type: "uint16" },
-      {
-        internalType: "address",
-        name: "_beefyZapRouter",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              { internalType: "uint256", name: "amount", type: "uint256" },
-            ],
-            internalType: "struct IBeefyZapRouter.Input[]",
-            name: "inputs",
-            type: "tuple[]",
-          },
-          {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              {
-                internalType: "uint256",
-                name: "minOutputAmount",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct IBeefyZapRouter.Output[]",
-            name: "outputs",
-            type: "tuple[]",
-          },
-          {
-            components: [
-              {
-                internalType: "address",
-                name: "target",
-                type: "address",
-              },
-              { internalType: "uint256", name: "value", type: "uint256" },
-              { internalType: "bytes", name: "data", type: "bytes" },
-            ],
-            internalType: "struct IBeefyZapRouter.Relay",
-            name: "relay",
-            type: "tuple",
-          },
-          { internalType: "address", name: "user", type: "address" },
-          { internalType: "address", name: "recipient", type: "address" },
-        ],
-        internalType: "struct IBeefyZapRouter.Order",
-        name: "_newOrder",
-        type: "tuple",
-      },
-      {
-        components: [
-          { internalType: "address", name: "target", type: "address" },
-          { internalType: "uint256", name: "value", type: "uint256" },
-          { internalType: "bytes", name: "data", type: "bytes" },
-          {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              { internalType: "int32", name: "index", type: "int32" },
-            ],
-            internalType: "struct IBeefyZapRouter.StepToken[]",
-            name: "tokens",
-            type: "tuple[]",
-          },
-        ],
-        internalType: "struct IBeefyZapRouter.Step[]",
-        name: "_newStep",
-        type: "tuple[]",
-      },
-    ],
-    name: "depositToBeefyVault",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "_user", type: "address" },
-      { internalType: "uint16", name: "_intervalIndex", type: "uint16" },
-    ],
-    name: "flagUser",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "getActiveIndicesLength",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "bytes32", name: "role", type: "bytes32" }],
-    name: "getRoleAdmin",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "grantRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_user", type: "address" }],
-    name: "hasClaimed",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "_user", type: "address" },
-      { internalType: "uint256", name: "_intervalIndex", type: "uint256" },
-    ],
-    name: "hasPaid",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "hasRole",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_user", type: "address" }],
-    name: "hasWon",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "initialiseKuri",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    name: "intervalToWinnerIndex",
-    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "kuriData",
-    outputs: [
-      { internalType: "address", name: "creator", type: "address" },
-      { internalType: "uint64", name: "kuriAmount", type: "uint64" },
-      {
-        internalType: "uint16",
-        name: "totalParticipantsCount",
-        type: "uint16",
-      },
-      {
-        internalType: "uint16",
-        name: "totalActiveParticipantsCount",
-        type: "uint16",
-      },
-      {
-        internalType: "uint24",
-        name: "intervalDuration",
-        type: "uint24",
-      },
-      { internalType: "uint48", name: "nexRaffleTime", type: "uint48" },
-      {
-        internalType: "uint48",
-        name: "nextIntervalDepositTime",
-        type: "uint48",
-      },
-      { internalType: "uint48", name: "launchPeriod", type: "uint48" },
-      { internalType: "uint48", name: "startTime", type: "uint48" },
-      { internalType: "uint48", name: "endTime", type: "uint48" },
-      {
-        internalType: "enum KuriCore.IntervalType",
-        name: "intervalType",
-        type: "uint8",
-      },
-      {
-        internalType: "enum KuriCore.KuriState",
-        name: "state",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "kuriNarukk",
-    outputs: [{ internalType: "uint256", name: "_requestId", type: "uint256" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "passedIntervalsCounter",
     outputs: [
       {
-        internalType: "uint16",
-        name: "numTotalDepositIntervalsPassed",
-        type: "uint16",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "", type: "uint256" },
-      { internalType: "uint256", name: "", type: "uint256" },
-    ],
-    name: "payments",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "requestId", type: "uint256" },
-      {
-        internalType: "uint256[]",
-        name: "randomWords",
-        type: "uint256[]",
-      },
-    ],
-    name: "rawFulfillRandomWords",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "_user", type: "address" }],
-    name: "rejectUserMembershipRequest",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      {
-        internalType: "address",
-        name: "callerConfirmation",
-        type: "address",
-      },
-    ],
-    name: "renounceRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "requestMembership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "_initialiser", type: "address" },
-    ],
-    name: "revokeInitialisor",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "bytes32", name: "role", type: "bytes32" },
-      { internalType: "address", name: "account", type: "address" },
-    ],
-    name: "revokeRole",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_callbackGasLimit",
-    outputs: [{ internalType: "uint32", name: "", type: "uint32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_keyHash",
-    outputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_numWords",
-    outputs: [{ internalType: "uint32", name: "", type: "uint32" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_requestConfirmations",
-    outputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_subscriptionId",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_vrfCoordinator",
-    outputs: [
-      {
-        internalType: "contract IVRFCoordinatorV2Plus",
         name: "",
         type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
+    type: "function",
+    name: "claimKuriAmount",
     inputs: [
       {
-        internalType: "address",
-        name: "_vrfCoordinator",
-        type: "address",
+        name: "_intervalIndex",
+        type: "uint16",
+        internalType: "uint16",
       },
     ],
-    name: "setCoordinator",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "claimedKuriSlot",
     inputs: [
-      { internalType: "address", name: "_initialiser", type: "address" },
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
     ],
-    name: "setInitialisor",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "bytes4", name: "interfaceId", type: "bytes4" }],
-    name: "supportsInterface",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "to", type: "address" }],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "userBeefyPosition",
-    outputs: [
-      { internalType: "address", name: "user", type: "address" },
-      { internalType: "address", name: "vaultAddress", type: "address" },
-      { internalType: "uint64", name: "shareAmount", type: "uint64" },
-      { internalType: "uint64", name: "originalAmount", type: "uint64" },
-      { internalType: "uint64", name: "timestamp", type: "uint64" },
-      { internalType: "uint16", name: "intervalIndex", type: "uint16" },
-      { internalType: "bool", name: "isActive", type: "bool" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint16", name: "", type: "uint16" }],
-    name: "userIdToAddress",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "userInstallmentDeposit",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "userToData",
     outputs: [
       {
-        internalType: "enum KuriCore.UserState",
-        name: "userState",
-        type: "uint8",
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
       },
-      { internalType: "uint16", name: "userIndex", type: "uint16" },
-      { internalType: "address", name: "userAddress", type: "address" },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
-    name: "vrfCoordinator",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
-    stateMutability: "view",
     type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdraw",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
+    name: "depositToBeefyVault",
     inputs: [
       {
-        internalType: "address",
+        name: "_intervalIndex",
+        type: "uint16",
+        internalType: "uint16",
+      },
+      {
         name: "_beefyZapRouter",
         type: "address",
+        internalType: "address",
       },
       {
-        components: [
-          {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              { internalType: "uint256", name: "amount", type: "uint256" },
-            ],
-            internalType: "struct IBeefyZapRouter.Input[]",
-            name: "inputs",
-            type: "tuple[]",
-          },
-          {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              {
-                internalType: "uint256",
-                name: "minOutputAmount",
-                type: "uint256",
-              },
-            ],
-            internalType: "struct IBeefyZapRouter.Output[]",
-            name: "outputs",
-            type: "tuple[]",
-          },
-          {
-            components: [
-              {
-                internalType: "address",
-                name: "target",
-                type: "address",
-              },
-              { internalType: "uint256", name: "value", type: "uint256" },
-              { internalType: "bytes", name: "data", type: "bytes" },
-            ],
-            internalType: "struct IBeefyZapRouter.Relay",
-            name: "relay",
-            type: "tuple",
-          },
-          { internalType: "address", name: "user", type: "address" },
-          { internalType: "address", name: "recipient", type: "address" },
-        ],
-        internalType: "struct IBeefyZapRouter.Order",
         name: "_newOrder",
         type: "tuple",
-      },
-      {
+        internalType: "struct IBeefyZapRouter.Order",
         components: [
-          { internalType: "address", name: "target", type: "address" },
-          { internalType: "uint256", name: "value", type: "uint256" },
-          { internalType: "bytes", name: "data", type: "bytes" },
           {
-            components: [
-              { internalType: "address", name: "token", type: "address" },
-              { internalType: "int32", name: "index", type: "int32" },
-            ],
-            internalType: "struct IBeefyZapRouter.StepToken[]",
-            name: "tokens",
+            name: "inputs",
             type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.Input[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "amount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
+          },
+          {
+            name: "outputs",
+            type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.Output[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "minOutputAmount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
+          },
+          {
+            name: "relay",
+            type: "tuple",
+            internalType: "struct IBeefyZapRouter.Relay",
+            components: [
+              {
+                name: "target",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "value",
+                type: "uint256",
+                internalType: "uint256",
+              },
+              {
+                name: "data",
+                type: "bytes",
+                internalType: "bytes",
+              },
+            ],
+          },
+          {
+            name: "user",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "recipient",
+            type: "address",
+            internalType: "address",
           },
         ],
-        internalType: "struct IBeefyZapRouter.Step[]",
+      },
+      {
         name: "_newStep",
         type: "tuple[]",
+        internalType: "struct IBeefyZapRouter.Step[]",
+        components: [
+          {
+            name: "target",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "value",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "data",
+            type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "tokens",
+            type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.StepToken[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "index",
+                type: "int32",
+                internalType: "int32",
+              },
+            ],
+          },
+        ],
       },
     ],
-    name: "withdrawFromBeefyVault",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "wonKuriSlot",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
     type: "function",
+    name: "flagUser",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_intervalIndex",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "getActiveIndicesLength",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getRoleAdmin",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "grantRole",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "hasClaimed",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "hasPaid",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_intervalIndex",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "hasRole",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "hasWon",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "initialiseKuri",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "intervalToWinnerIndex",
+    inputs: [
+      {
+        name: "",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "kuriData",
+    inputs: [],
+    outputs: [
+      {
+        name: "creator",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "kuriAmount",
+        type: "uint64",
+        internalType: "uint64",
+      },
+      {
+        name: "totalParticipantsCount",
+        type: "uint16",
+        internalType: "uint16",
+      },
+      {
+        name: "totalActiveParticipantsCount",
+        type: "uint16",
+        internalType: "uint16",
+      },
+      {
+        name: "intervalDuration",
+        type: "uint24",
+        internalType: "uint24",
+      },
+      {
+        name: "nexRaffleTime",
+        type: "uint48",
+        internalType: "uint48",
+      },
+      {
+        name: "nextIntervalDepositTime",
+        type: "uint48",
+        internalType: "uint48",
+      },
+      {
+        name: "launchPeriod",
+        type: "uint48",
+        internalType: "uint48",
+      },
+      {
+        name: "startTime",
+        type: "uint48",
+        internalType: "uint48",
+      },
+      {
+        name: "endTime",
+        type: "uint48",
+        internalType: "uint48",
+      },
+      {
+        name: "intervalType",
+        type: "uint8",
+        internalType: "enum KuriCore.IntervalType",
+      },
+      {
+        name: "state",
+        type: "uint8",
+        internalType: "enum KuriCore.KuriState",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "kuriNarukk",
+    inputs: [],
+    outputs: [
+      {
+        name: "_requestId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "owner",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "passedIntervalsCounter",
+    inputs: [],
+    outputs: [
+      {
+        name: "numTotalDepositIntervalsPassed",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "payments",
+    inputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "rawFulfillRandomWords",
+    inputs: [
+      {
+        name: "requestId",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "randomWords",
+        type: "uint256[]",
+        internalType: "uint256[]",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "rejectUserMembershipRequest",
+    inputs: [
+      {
+        name: "_user",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "renounceRole",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "callerConfirmation",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "requestMembership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "revokeInitialisor",
+    inputs: [
+      {
+        name: "_initialiser",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "revokeRole",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "s_callbackGasLimit",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint32",
+        internalType: "uint32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "s_keyHash",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "s_numWords",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint32",
+        internalType: "uint32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "s_requestConfirmations",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "s_subscriptionId",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "s_vrfCoordinator",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IVRFCoordinatorV2Plus",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "setCoordinator",
+    inputs: [
+      {
+        name: "_vrfCoordinator",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setInitialisor",
+    inputs: [
+      {
+        name: "_initialiser",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "supportsInterface",
+    inputs: [
+      {
+        name: "interfaceId",
+        type: "bytes4",
+        internalType: "bytes4",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "transferOwnership",
+    inputs: [
+      {
+        name: "to",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "userBeefyPosition",
+    inputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "user",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "vaultAddress",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "shareAmount",
+        type: "uint64",
+        internalType: "uint64",
+      },
+      {
+        name: "originalAmount",
+        type: "uint64",
+        internalType: "uint64",
+      },
+      {
+        name: "timestamp",
+        type: "uint64",
+        internalType: "uint64",
+      },
+      {
+        name: "intervalIndex",
+        type: "uint16",
+        internalType: "uint16",
+      },
+      {
+        name: "isActive",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "userIdToAddress",
+    inputs: [
+      {
+        name: "",
+        type: "uint16",
+        internalType: "uint16",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "userInstallmentDeposit",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "userToData",
+    inputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "userState",
+        type: "uint8",
+        internalType: "enum KuriCore.UserState",
+      },
+      {
+        name: "userIndex",
+        type: "uint16",
+        internalType: "uint16",
+      },
+      {
+        name: "userAddress",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "vrfCoordinator",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawFromBeefyVault",
+    inputs: [
+      {
+        name: "_beefyZapRouter",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_newOrder",
+        type: "tuple",
+        internalType: "struct IBeefyZapRouter.Order",
+        components: [
+          {
+            name: "inputs",
+            type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.Input[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "amount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
+          },
+          {
+            name: "outputs",
+            type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.Output[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "minOutputAmount",
+                type: "uint256",
+                internalType: "uint256",
+              },
+            ],
+          },
+          {
+            name: "relay",
+            type: "tuple",
+            internalType: "struct IBeefyZapRouter.Relay",
+            components: [
+              {
+                name: "target",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "value",
+                type: "uint256",
+                internalType: "uint256",
+              },
+              {
+                name: "data",
+                type: "bytes",
+                internalType: "bytes",
+              },
+            ],
+          },
+          {
+            name: "user",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "recipient",
+            type: "address",
+            internalType: "address",
+          },
+        ],
+      },
+      {
+        name: "_newStep",
+        type: "tuple[]",
+        internalType: "struct IBeefyZapRouter.Step[]",
+        components: [
+          {
+            name: "target",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "value",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "data",
+            type: "bytes",
+            internalType: "bytes",
+          },
+          {
+            name: "tokens",
+            type: "tuple[]",
+            internalType: "struct IBeefyZapRouter.StepToken[]",
+            components: [
+              {
+                name: "token",
+                type: "address",
+                internalType: "address",
+              },
+              {
+                name: "index",
+                type: "int32",
+                internalType: "int32",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "wonKuriSlot",
+    inputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    name: "BeefyVaultDeposit",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "intervalIndex",
+        type: "uint16",
+        indexed: true,
+        internalType: "uint16",
+      },
+      {
+        name: "vaultAddress",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "shareAmount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "kuriAmount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "timestamp",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "BeefyVaultWithdraw",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "vaultAddress",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "shareAmount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "withdrawAmount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "timestamp",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "CoordinatorSet",
+    inputs: [
+      {
+        name: "vrfCoordinator",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "KuriInitFailed",
+    inputs: [
+      {
+        name: "creator",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "kuriAmount",
+        type: "uint64",
+        indexed: false,
+        internalType: "uint64",
+      },
+      {
+        name: "totalParticipantsCount",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+      {
+        name: "state",
+        type: "uint8",
+        indexed: false,
+        internalType: "enum KuriCore.KuriState",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "KuriInitialised",
+    inputs: [
+      {
+        name: "_kuriData",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct KuriCore.Kuri",
+        components: [
+          {
+            name: "creator",
+            type: "address",
+            internalType: "address",
+          },
+          {
+            name: "kuriAmount",
+            type: "uint64",
+            internalType: "uint64",
+          },
+          {
+            name: "totalParticipantsCount",
+            type: "uint16",
+            internalType: "uint16",
+          },
+          {
+            name: "totalActiveParticipantsCount",
+            type: "uint16",
+            internalType: "uint16",
+          },
+          {
+            name: "intervalDuration",
+            type: "uint24",
+            internalType: "uint24",
+          },
+          {
+            name: "nexRaffleTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "nextIntervalDepositTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "launchPeriod",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "startTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "endTime",
+            type: "uint48",
+            internalType: "uint48",
+          },
+          {
+            name: "intervalType",
+            type: "uint8",
+            internalType: "enum KuriCore.IntervalType",
+          },
+          {
+            name: "state",
+            type: "uint8",
+            internalType: "enum KuriCore.KuriState",
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "KuriSlotClaimed",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "timestamp",
+        type: "uint64",
+        indexed: false,
+        internalType: "uint64",
+      },
+      {
+        name: "kuriAmount",
+        type: "uint64",
+        indexed: false,
+        internalType: "uint64",
+      },
+      {
+        name: "intervalIndex",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MarketVRFSubscriptionDone",
+    inputs: [
+      {
+        name: "subscriptionId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "subscriber",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MembershipRequested",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "timestamp",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferRequested",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      {
+        name: "from",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "to",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RaffleWinnerSelected",
+    inputs: [
+      {
+        name: "intervalIndex",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+      {
+        name: "winnerIndex",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+      {
+        name: "winnerAddress",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "winnerTimestamp",
+        type: "uint48",
+        indexed: false,
+        internalType: "uint48",
+      },
+      {
+        name: "requestId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleAdminChanged",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "previousAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "newAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleGranted",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleRevoked",
+    inputs: [
+      {
+        name: "role",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UserAccepted",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "caller",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "_totalActiveParticipantsCount",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UserDeposited",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "userIndex",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "intervalIndex",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "amountDeposited",
+        type: "uint64",
+        indexed: false,
+        internalType: "uint64",
+      },
+      {
+        name: "depositTimestamp",
+        type: "uint48",
+        indexed: false,
+        internalType: "uint48",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UserFlagged",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "intervalIndex",
+        type: "uint16",
+        indexed: false,
+        internalType: "uint16",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "UserRejected",
+    inputs: [
+      {
+        name: "user",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+      {
+        name: "caller",
+        type: "address",
+        indexed: false,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "AccessControlBadConfirmation",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AccessControlUnauthorizedAccount",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "neededRole",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "KuriCore__AlreadyPastLaunchPeriod",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__AlreadyRejected",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__BeefyArraysOutOfBound",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CallerNotAccepted",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CantAcceptMoreThanMax",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CantFlagForInvalidIndex",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CantFlagUserAlreadyPaid",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CantOperateWhenNotInLaunch",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__CantWithdrawWhenCycleIsActive",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__DepositIntervalNotReached",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InsufficientClaimBalance",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidBeefyDepositAmount",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidIntervalIndex",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidPosition",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidRecipient",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidSource",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidSubscriptionId",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidUser",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidUserRequest",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidVaultAddress",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__InvalidWithdrawToken",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__KuriFilledAlready",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__MatketYetToBeSubscribed",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__NoActiveIndicesLeft",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__NoActiveKuri",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__NotInLaunchState",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__OnlyCircleCurrencyAllowed",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__RaffleDelayNotOver",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserAlreadyAccepted",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserAlreadyDeposited",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserAlreadyFlagged",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserAlreadyRequested",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserHasClaimedAlready",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserYetToGetASlot",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__UserYetToMakePayments",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "OnlyCoordinatorCanFulfill",
+    inputs: [
+      {
+        name: "have",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "want",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "OnlyOwnerOrCoordinator",
+    inputs: [
+      {
+        name: "have",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "coordinator",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ZeroAddress",
+    inputs: [],
   },
 ] as const;
