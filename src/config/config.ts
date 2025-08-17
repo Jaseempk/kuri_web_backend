@@ -14,12 +14,14 @@ if (!privateKey) {
   throw new Error("PRIVATE_KEY environment variable is required");
 }
 
-if (!privateKey.startsWith('0x')) {
+if (!privateKey.startsWith("0x")) {
   throw new Error("PRIVATE_KEY must start with 0x");
 }
 
 if (privateKey.length !== 66) {
-  throw new Error(`PRIVATE_KEY must be 66 characters long, got ${privateKey.length}`);
+  throw new Error(
+    `PRIVATE_KEY must be 66 characters long, got ${privateKey.length}`
+  );
 }
 
 export const config = {
@@ -27,7 +29,7 @@ export const config = {
   PRIVATE_KEY: privateKey,
   SUBGRAPH_URL:
     process.env.SUBGRAPH_URL ||
-    "https://indexer.dev.hyperindex.xyz/009fddc/v1/graphql",
+    "https://indexer.dev.hyperindex.xyz/11c60b7/v1/graphql",
   CRON_SCHEDULE: process.env.CRON_SCHEDULE || "*/5 * * * *", // every 5 minutes
   CHAIN_ID: 84532, // Base Sepolia
   VRF_COORDINATOR: "0x5C210eF41CD1a72de73bF76eC39637bB0d3d7BEE",
