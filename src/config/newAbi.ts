@@ -47,6 +47,11 @@ export const KuriCoreABI = [
         type: "address",
         internalType: "address",
       },
+      {
+        name: "_treasuryAddress",
+        type: "address",
+        internalType: "address",
+      },
     ],
     stateMutability: "nonpayable",
   },

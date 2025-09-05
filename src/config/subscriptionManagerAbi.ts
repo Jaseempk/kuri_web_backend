@@ -1,87 +1,100 @@
 export const SubscriptionManagerABI = [
   {
-    "inputs": [
-      {"internalType": "address", "name": "_linkToken", "type": "address"}
+    inputs: [
+      { internalType: "address", name: "_linkToken", type: "address" },
+      { internalType: "address", name: "_vrfCoordinator", type: "address" },
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    stateMutability: "nonpayable",
+    type: "constructor",
   },
   {
-    "inputs": [
-      {"internalType": "address", "name": "owner", "type": "address"}
-    ],
-    "name": "OwnableInvalidOwner",
-    "type": "error"
+    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    name: "OwnableInvalidOwner",
+    type: "error",
   },
   {
-    "inputs": [
-      {"internalType": "address", "name": "account", "type": "address"}
-    ],
-    "name": "OwnableUnauthorizedAccount",
-    "type": "error"
+    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    name: "OwnableUnauthorizedAccount",
+    type: "error",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
     ],
-    "name": "OwnershipTransferred",
-    "type": "event"
+    name: "OwnershipTransferred",
+    type: "event",
   },
   {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {"internalType": "address", "name": "", "type": "address"}
+    inputs: [],
+    name: "LINKTOKEN",
+    outputs: [
+      {
+        internalType: "contract LinkTokenInterface",
+        name: "",
+        type: "address",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
-      {"internalType": "uint256", "name": "amount", "type": "uint256"},
-      {"internalType": "uint256", "name": "_s_subscriptionId", "type": "uint256"}
-    ],
-    "name": "topUpSubscription",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
-      {"internalType": "address", "name": "newOwner", "type": "address"}
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "s_vrfCoordinator",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
-      {"internalType": "uint256", "name": "amount", "type": "uint256"},
-      {"internalType": "address", "name": "to", "type": "address"}
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "_s_subscriptionId", type: "uint256" },
     ],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+    name: "topUpSubscription",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "address", name: "to", type: "address" },
+    ],
+    name: "withdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ] as const;
