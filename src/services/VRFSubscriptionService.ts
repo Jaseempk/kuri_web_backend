@@ -32,8 +32,8 @@ export class VRFSubscriptionService {
     process.cwd(),
     "funded-subscriptions.json"
   );
-  private readonly minimumBalance = BigInt("1000000000000000000"); // 1 LINK
-  private readonly fundingAmount = BigInt("5000000000000000000"); // 5 LINK
+  private readonly minimumBalance = BigInt("100000000000000000"); // 0.1 LINK
+  private readonly fundingAmount = BigInt("1000000000000000000"); // 1 LINK
   private readonly subscriptionManagerAddress = config.SUBSCRIPTION_MANAGER;
   private readonly maxRetryAttempts = 3;
 
