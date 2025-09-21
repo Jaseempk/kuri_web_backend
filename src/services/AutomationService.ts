@@ -5,7 +5,7 @@ import {
   TransactionReceipt,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseSepolia } from "viem/chains";
+import { base } from "viem/chains";
 import { config } from "../config/config";
 import { logger } from "../utils/logger";
 import { SubgraphService } from "./SubgraphService";
@@ -45,7 +45,7 @@ export class AutomationService {
 
   constructor() {
     this.publicClient = createPublicClient({
-      chain: baseSepolia,
+      chain: base,
       transport: http(config.RPC_URL),
     });
 
@@ -63,7 +63,7 @@ export class AutomationService {
 
     this.walletClient = createWalletClient({
       account,
-      chain: baseSepolia,
+      chain: base,
       transport: http(config.RPC_URL),
     });
 
