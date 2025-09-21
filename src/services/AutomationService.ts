@@ -42,6 +42,7 @@ export class AutomationService {
   private vrfSubscriptionService;
   private scheduleJob;
   private pendingTransactions: Map<string, TransactionStatus>;
+  private lastRaffleAttempts: Map<string, number>; // Track last raffle attempt per market
 
   constructor() {
     this.publicClient = createPublicClient({
@@ -70,6 +71,7 @@ export class AutomationService {
     this.subgraphService = new SubgraphService();
     this.vrfSubscriptionService = new VRFSubscriptionService();
     this.pendingTransactions = new Map();
+    this.lastRaffleAttempts = new Map();
 
     // Schedule raffle checks every 5 minutes
     this.scheduleJob = schedule.scheduleJob("*/5 * * * *", () => {
@@ -351,6 +353,21 @@ export class AutomationService {
         );
         return;
       }
+
+      // Check if we've attempted a raffle for this market recently (within 1 hour)
+      const lastAttemptTime = this.lastRaffleAttempts.get(market.marketAddress) || 0;
+      const currentTimeMs = Date.now();
+      const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+      
+      if (currentTimeMs - lastAttemptTime < oneHour) {
+        logger.info(
+          `Raffle attempt for market ${market.marketAddress} was made recently (${Math.round((currentTimeMs - lastAttemptTime) / (60 * 1000))} minutes ago). Waiting before next attempt.`
+        );
+        return;
+      }
+
+      // Record the raffle attempt time
+      this.lastRaffleAttempts.set(market.marketAddress, currentTimeMs);
 
       logger.info(`Initiating raffle for market: ${market.marketAddress}`);
       logger.info(`Using account: ${this.walletClient.account?.address}`);
