@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rm -rf dist/",
-    "prebuild": "npm run clean",
-    "build": "tsc",
+    "prebuild": "npm run clean && echo 'Force rebuild timestamp:' $(date)",
+    "build": "tsc --build --force",
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
     "watch": "nodemon src/index.ts",
