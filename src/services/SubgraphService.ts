@@ -69,7 +69,7 @@ export class SubgraphService {
     currentInterval: number
   ): Promise<RaffleWinnerSelected | null> {
     const query = gql`
-      query RecentRaffleWinner($marketAddress: String!, $intervalIndex: Int!) {
+      query RecentRaffleWinner($marketAddress: String!, $intervalIndex: BigInt!) {
         raffleWinnerSelecteds: KuriCore_RaffleWinnerSelected(
           where: { 
             contractAddress: { _ilike: $marketAddress }
