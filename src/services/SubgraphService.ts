@@ -69,7 +69,7 @@ export class SubgraphService {
     currentInterval: number
   ): Promise<RaffleWinnerSelected | null> {
     const query = gql`
-      query RecentRaffleWinner($marketAddress: String!, $intervalIndex: String!) {
+      query RecentRaffleWinner($marketAddress: String!, $intervalIndex: Int!) {
         raffleWinnerSelecteds: KuriCore_RaffleWinnerSelected(
           where: { 
             contractAddress: { _ilike: $marketAddress }
@@ -92,7 +92,7 @@ export class SubgraphService {
     try {
       const data = await request<RaffleWinnerResponse>(this.endpoint, query, {
         marketAddress,
-        intervalIndex: currentInterval.toString(),
+        intervalIndex: currentInterval,
       });
       
       return data.raffleWinnerSelecteds.length > 0 
