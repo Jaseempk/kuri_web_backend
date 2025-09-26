@@ -43,3 +43,9 @@ export interface SubgraphResponse {
 export interface RaffleWinnerResponse {
   raffleWinnerSelecteds: RaffleWinnerSelected[];
 }
+
+export enum KuriState {
+  INLAUNCH = 0,
+  ACTIVE = 1,
+  COMPLETED = 2
+}

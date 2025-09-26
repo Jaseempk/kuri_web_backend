@@ -10,7 +10,7 @@ import { config } from "../config/config";
 import { logger } from "../utils/logger";
 import { SubgraphService } from "./SubgraphService";
 import { VRFSubscriptionService } from "./VRFSubscriptionService";
-import { KuriMarketDeployed, KuriInitialised } from "../types/types";
+import { KuriMarketDeployed, KuriInitialised, KuriState } from "../types/types";
 import * as schedule from "node-schedule";
 import { KuriCoreABI } from "../config/newAbi";
 
@@ -21,6 +21,7 @@ const TX_CONFIRMATION_BLOCKS = 2;
 
 interface MarketState {
   isActive: boolean;
+  state: KuriState;
   nexRaffleTime: bigint;
   nextIntervalDepositTime: bigint;
   totalParticipants: bigint;
@@ -215,6 +216,19 @@ export class AutomationService {
     }
   }
 
+  private getStateString(state: KuriState): string {
+    switch (state) {
+      case KuriState.INLAUNCH:
+        return "INLAUNCH";
+      case KuriState.ACTIVE:
+        return "ACTIVE";
+      case KuriState.COMPLETED:
+        return "COMPLETED";
+      default:
+        return `UNKNOWN(${state})`;
+    }
+  }
+
   async checkAndExecuteRaffles() {
     try {
       const { deployed, initialized } = await this.retryWithBackoff(() =>
@@ -250,8 +264,10 @@ export class AutomationService {
           functionName: "passedIntervalsCounter",
         })) as number;
 
+        const state = marketData[11] as KuriState;
         return {
-          isActive: marketData[11] === 2,
+          isActive: state === KuriState.ACTIVE,
+          state: state,
           nexRaffleTime: BigInt(marketData[5]),
           nextIntervalDepositTime: BigInt(marketData[6]),
           totalParticipants: BigInt(marketData[2]),
@@ -320,7 +336,7 @@ export class AutomationService {
       }
 
       if (!state.isActive) {
-        logger.info(`Market ${market.marketAddress} is not active`);
+        logger.info(`Market ${market.marketAddress} is not active (state: ${this.getStateString(state.state)})`);
         return;
       }
 

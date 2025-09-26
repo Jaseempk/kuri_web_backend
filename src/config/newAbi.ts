@@ -466,13 +466,7 @@ export const KuriCoreABI = [
     type: "function",
     name: "initialiseKuri",
     inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
+    outputs: [],
     stateMutability: "nonpayable",
   },
   {
@@ -1211,37 +1205,6 @@ export const KuriCoreABI = [
   },
   {
     type: "event",
-    name: "KuriInitFailed",
-    inputs: [
-      {
-        name: "creator",
-        type: "address",
-        indexed: false,
-        internalType: "address",
-      },
-      {
-        name: "kuriAmount",
-        type: "uint64",
-        indexed: false,
-        internalType: "uint64",
-      },
-      {
-        name: "totalParticipantsCount",
-        type: "uint16",
-        indexed: false,
-        internalType: "uint16",
-      },
-      {
-        name: "state",
-        type: "uint8",
-        indexed: false,
-        internalType: "enum KuriCore.KuriState",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
     name: "KuriInitialised",
     inputs: [
       {
@@ -1787,6 +1750,11 @@ export const KuriCoreABI = [
   },
   {
     type: "error",
+    name: "KuriCore__NotEnoughMembers",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "KuriCore__NotInLaunchState",
     inputs: [],
   },
@@ -1833,6 +1801,11 @@ export const KuriCoreABI = [
   {
     type: "error",
     name: "KuriCore__UserYetToMakePayments",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "KuriCore__WinnerAlreadySelected",
     inputs: [],
   },
   {

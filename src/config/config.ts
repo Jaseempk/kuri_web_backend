@@ -29,7 +29,7 @@ export const config = {
   PRIVATE_KEY: privateKey,
   SUBGRAPH_URL:
     process.env.SUBGRAPH_URL ||
-    "https://indexer.dev.hyperindex.xyz/11c60b7/v1/graphql",
+    "https://indexer.dev.hyperindex.xyz/5f9ef53/v1/graphql",
   CRON_SCHEDULE: process.env.CRON_SCHEDULE || "*/5 * * * *", // every 5 minutes
   CHAIN_ID: 8453, // Base
   VRF_COORDINATOR: "0xd5D517aBE5cF79B7e95eC98dB0f0277788aFF634",

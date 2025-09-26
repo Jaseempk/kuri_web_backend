@@ -5,6 +5,7 @@ import {
   mockKuriData,
   mockTransactionReceipt 
 } from '../mocks/testData';
+import { KuriState } from '../../src/types/types';
 
 // Access shared mock instances from global setup
 const mockPublicClient = (global as any).__mockPublicClient;
@@ -98,7 +99,7 @@ describe('AutomationService', () => {
     it('should skip inactive markets', async () => {
       // Arrange
       const inactiveKuriData = [...mockKuriData];
-      inactiveKuriData[11] = 0; // state = INLAUNCH
+      inactiveKuriData[11] = KuriState.INLAUNCH; // state = INLAUNCH
 
       mockSubgraphService.getActiveMarkets.mockResolvedValueOnce({
         deployed: [mockMarketDeployed],

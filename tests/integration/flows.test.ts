@@ -9,6 +9,7 @@ import {
   mockLowBalanceSubscriptionInfo,
   mockSubgraphResponse
 } from '../mocks/testData';
+import { KuriState } from '../../src/types/types';
 import { mockPublicClient, mockWalletClient } from '../mocks/viemMocks';
 import * as fs from 'fs';
 
@@ -120,7 +121,7 @@ describe('Integration Tests - Complete Automation Flows', () => {
 
       // Mock responses for different market states
       const inactiveKuriData = [...mockKuriData];
-      inactiveKuriData[11] = 0; // INLAUNCH state
+      inactiveKuriData[11] = KuriState.INLAUNCH; // INLAUNCH state
 
       mockPublicClient.readContract
         // Active market - should execute

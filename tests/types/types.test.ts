@@ -35,7 +35,7 @@ describe('Type Definitions', () => {
         _kuriData_8: '1704067200', // startTime
         _kuriData_9: '1706745600', // endTime
         _kuriData_10: '0', // intervalType
-        _kuriData_11: '2', // state
+        _kuriData_11: '1', // state
         contractAddress: '0x456',
       };
 
