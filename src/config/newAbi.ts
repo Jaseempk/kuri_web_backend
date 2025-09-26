@@ -1847,6 +1847,17 @@ export const KuriCoreABI = [
   },
   {
     type: "error",
+    name: "SafeERC20FailedOperation",
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
     name: "ZeroAddress",
     inputs: [],
   },
